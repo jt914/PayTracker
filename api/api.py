@@ -7,6 +7,9 @@ import io
 import json
 
 
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from backend.transactions_processor import TransactionProcessor
 from backend.card_update_analyzer import CardUpdateAnalyzer
 from backend.notifs_engine import NotificationEngine
