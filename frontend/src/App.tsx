@@ -10,6 +10,7 @@ import NotificationsContent from "./components/notifications/NotificationsConten
 import SettingsContent from "./components/settings/SettingsContent";
 import { useTransactions } from "./hooks/useTransactions";
 import { useNotifications } from "./hooks/useNotifications";
+import { ThemeProvider } from "./components/theme-provider";
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -24,49 +25,51 @@ const App: React.FC = () => {
   const { notifications } = useNotifications();
 
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
-      
-      <div className="flex-1 overflow-auto">
-        <Header
-          loading={loading}
-          simResult={simResult}
-          onGenerateSample={handleGenerateSample}
-          onSimulateCardUpdate={handleSimulateCardUpdate}
-        />
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <div className="flex h-screen bg-background">
+        <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+        
+        <div className="flex-1 overflow-auto">
+          <Header
+            loading={loading}
+            simResult={simResult}
+            onGenerateSample={handleGenerateSample}
+            onSimulateCardUpdate={handleSimulateCardUpdate}
+          />
 
-        <main className="p-4">
-          <Tabs value={activeTab} className="w-full">
-            <TabsContent value="dashboard">
-              <DashboardContent
-                recurringSummary={recurringSummary}
-                transactions={transactions}
-              />
-            </TabsContent>
+          <main className="p-4">
+            <Tabs value={activeTab} className="w-full">
+              <TabsContent value="dashboard">
+                <DashboardContent
+                  recurringSummary={recurringSummary}
+                  transactions={transactions}
+                />
+              </TabsContent>
 
-            <TabsContent value="analytics">
-              <AnalyticsContent transactions={transactions} />
-            </TabsContent>
+              <TabsContent value="analytics">
+                <AnalyticsContent transactions={transactions} />
+              </TabsContent>
 
-            <TabsContent value="transactions">
-              <TransactionsContent transactions={transactions} />
-            </TabsContent>
+              <TabsContent value="transactions">
+                <TransactionsContent transactions={transactions} />
+              </TabsContent>
 
-            <TabsContent value="tracking">
-              <TrackingContent transactions={transactions} />
-            </TabsContent>
+              <TabsContent value="tracking">
+                <TrackingContent transactions={transactions} />
+              </TabsContent>
 
-            <TabsContent value="notifications">
-              <NotificationsContent notifications={notifications} />
-            </TabsContent>
+              <TabsContent value="notifications">
+                <NotificationsContent notifications={notifications} />
+              </TabsContent>
 
-            <TabsContent value="settings">
-              <SettingsContent />
-            </TabsContent>
-          </Tabs>
-        </main>
+              <TabsContent value="settings">
+                <SettingsContent />
+              </TabsContent>
+            </Tabs>
+          </main>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 };
 
