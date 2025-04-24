@@ -2,3 +2,4 @@ flask
 flask_sqlalchemy
 pandas
 flask_cors
+psycopg2-binary

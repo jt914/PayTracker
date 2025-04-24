@@ -6,7 +6,6 @@ import pandas as pd
 import io
 import json
 
-
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -17,9 +16,6 @@ from models import db, Transaction, Notification
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///paytrackr.db'
-#should improve performance
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 from flask_cors import CORS
 CORS(app, origins=[
@@ -29,6 +25,17 @@ CORS(app, origins=[
     "http://localhost:5173"
 ], supports_credentials=True) # Add supports_credentials=True if needed, and ensure regex=True is default or set
 
+# Read DATABASE_URL from environment variable provided by Render
+database_url = os.environ.get('DATABASE_URL')
+
+# Replace 'postgres://' with 'postgresql://' if necessary
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize db after setting the URI
 db.init_app(app)
 
 with app.app_context():
