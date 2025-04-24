@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { BarChart, PieChart } from "recharts";
 import axios from "axios";
 
+
 interface Transaction {
   id: string;
   date: string;
