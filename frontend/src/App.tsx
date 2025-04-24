@@ -41,14 +41,16 @@ const App: React.FC = () => {
   const fetchTransactions = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/import-transactions`);
-      setTransactions(res.data.transactions);
-      // Calculate recurring summary
-      const recurring = res.data.transactions.filter((t: Transaction) => t.recurring).length;
-      const nonRecurring = res.data.transactions.length - recurring;
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/transactions`);
+      const transactionsData = res.data || [];
+      setTransactions(transactionsData);
+      const recurring = transactionsData.filter((t: Transaction) => t.recurring).length;
+      const nonRecurring = transactionsData.length - recurring;
       setRecurringSummary({ recurring, nonRecurring });
-    } catch {
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
       setTransactions([]);
+      setRecurringSummary({ recurring: 0, nonRecurring: 0 });
     } finally {
       setLoading(false);
     }
@@ -57,15 +59,16 @@ const App: React.FC = () => {
   const fetchNotifications = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/notifications`);
-      setNotifications(res.data.notifications);
-    } catch {
+      setNotifications(res.data.notifications || []);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
       setNotifications([]);
     }
   };
 
   const handleGenerateSample = async () => {
     setLoading(true);
-    await axios.post(`${import.meta.env.VITE_API_BASE_URL}/generate-sample-data`);
+    await axios.get(`${import.meta.env.VITE_API_BASE_URL}/generate-sample-data`);
     await fetchTransactions();
     setLoading(false);
   };

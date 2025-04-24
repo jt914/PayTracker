@@ -23,9 +23,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 from flask_cors import CORS
 CORS(app, origins=[
-    "https://pay-tracker-gvrjdfpm9-jt914s-projects.vercel.app",
+    r"https://pay-tracker-.*-jt914s-projects\.vercel\.app",  # Regex for Vercel previews
+    # Add your production domain here if you have one, e.g.:
+    # "https://your-production-domain.com", 
     "http://localhost:5173"
-])
+], supports_credentials=True) # Add supports_credentials=True if needed, and ensure regex=True is default or set
 
 db.init_app(app)
 
@@ -90,7 +92,11 @@ def import_transactions():
     
     #wait to commit
     db.session.commit()
-    return jsonify({"status": "success"})
+    
+    # Return transactions in the format expected by the frontend
+    df = pd.read_sql(Transaction.query.statement, db.engine)
+    transactions_json = json.loads(df.to_json(orient="records"))
+    return jsonify({"status": "success", "transactions": transactions_json})
 
 
 
@@ -118,9 +124,13 @@ def card_update():
 def get_notifications():
     notifs = Notification.query.order_by(Notification.timestamp.desc()).all()
     notif_list = [
-        {"merchants": n.merchants.split(','), "timestamp": n.timestamp.isoformat()} for n in notifs
+        {
+            "id": str(n.id),
+            "message": f"Update card for merchants: {', '.join(n.merchants.split(','))}",
+            "date": n.timestamp.isoformat()
+        } for n in notifs
     ]
-    return jsonify(notif_list)
+    return jsonify({"notifications": notif_list})
 
 @app.route('/api/generate-sample-data', methods=['GET'])
 def api_generate_sample_data():
