@@ -1,12 +1,20 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import sys
+
+import pandas as pd
+import io
+import json
+
+
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from backend.transactions_processor import TransactionProcessor
 from backend.card_update_analyzer import CardUpdateAnalyzer
 from backend.notifs_engine import NotificationEngine
 from models import db, Transaction, Notification
-import pandas as pd
-import io
-import json
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///paytrackr.db'
