@@ -41,16 +41,16 @@ const App: React.FC = () => {
   const fetchTransactions = async () => {
     setLoading(true);
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/import-transactions`);
-      const transactionsData = res.data.transactions || [];
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/transactions`);
+      const transactionsData = res.data || [];
       setTransactions(transactionsData);
-      // Calculate recurring summary
       const recurring = transactionsData.filter((t: Transaction) => t.recurring).length;
       const nonRecurring = transactionsData.length - recurring;
       setRecurringSummary({ recurring, nonRecurring });
     } catch (error) {
       console.error("Error fetching transactions:", error);
       setTransactions([]);
+      setRecurringSummary({ recurring: 0, nonRecurring: 0 });
     } finally {
       setLoading(false);
     }
