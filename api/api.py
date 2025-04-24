@@ -52,13 +52,14 @@ def import_transactions():
         if request.files['file'].filename.endswith('.csv'):
             df = pd.read_csv(request.files['file'])
         else:
-            try:
-                data = request.get_json(force=True)
-                df = pd.DataFrame(data)
-            except Exception:
-                return jsonify({"error": "Invalid JSON"}), 400
+            return jsonify({"error": "No file provided"}), 300
+
     else:
-        return jsonify({"error": "No file provided"}), 300
+        try:
+            data = request.get_json(force=True)
+            df = pd.DataFrame(data)
+        except Exception:
+            return jsonify({"error": "Invalid JSON"}), 400
 
     #organize and process using transaction processor
     transaction_processor.transactions = df
