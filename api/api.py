@@ -23,7 +23,8 @@ CORS(app, origins=[
     r"https://pay-tracker-.*-jt914s-projects\.vercel\.app",  # Regex for Vercel previews
     # Add your production domain here if you have one, e.g.:
     # "https://your-production-domain.com", 
-    "http://localhost:5173"
+    "http://localhost:5173",
+    https://pay-tracker.vercel.app/
 ], supports_credentials=True) # Add supports_credentials=True if needed, and ensure regex=True is default or set
 
 #initialize backend components
