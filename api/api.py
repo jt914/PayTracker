@@ -93,7 +93,7 @@ def card_update():
 
     statement = Transaction.query.statement
     # ----- Reloads transactions from DB here -----
-    df = pd.read_sql(statement, db.session.bind)
+    df = pd.read_sql(statement, db.engine)
     transaction_processor.transactions = df
     transaction_processor.standardize_columns()
     transaction_processor.categorize_transactions()
