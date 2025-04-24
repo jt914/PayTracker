@@ -1,4 +1,4 @@
-import pandas as pandas
+import pandas as pd
 from typing import List, Dict, Any, Optional
 
 class TransactionProcessor:
