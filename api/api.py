@@ -26,28 +26,32 @@ CORS(app, origins=[
     "http://localhost:5173"
 ], supports_credentials=True) # Add supports_credentials=True if needed, and ensure regex=True is default or set
 
+#initialize backend components
+#stateless, reloads from db on each request
+transaction_processor = TransactionProcessor()
+card_update_analyzer = CardUpdateAnalyzer(transaction_processor)
+notification_engine = NotificationEngine()
+
 # Read DATABASE_URL from environment variable provided by Render
 database_url = os.environ.get('DATABASE_URL')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Ensure the database_url is actually set before proceeding
+if not database_url:
+    raise ValueError("No DATABASE_URL set for Flask application")
 
 # Replace 'postgres://' with 'postgresql://' if necessary
-if database_url and database_url.startswith("postgres://"):
+if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
+# Set the configuration *after* potential modifications
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize db after setting the URI
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
-
-#initialize backend components
-#stateless, reloads from db on each request
-transaction_processor = TransactionProcessor()
-card_update_analyzer = CardUpdateAnalyzer(transaction_processor)
-notification_engine = NotificationEngine()
 
 def generate_sample_data():
     data = [
