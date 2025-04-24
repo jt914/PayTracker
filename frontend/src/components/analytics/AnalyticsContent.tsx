@@ -1,11 +1,13 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { BarChart, PieChart } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 import { Transaction } from '../../types';
 
 interface AnalyticsContentProps {
   transactions: Transaction[];
 }
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
 const AnalyticsContent: React.FC<AnalyticsContentProps> = ({ transactions }) => {
   // Calculate spending trends data
@@ -45,7 +47,12 @@ const AnalyticsContent: React.FC<AnalyticsContentProps> = ({ transactions }) => 
         </CardHeader>
         <CardContent>
           <BarChart width={400} height={300} data={spendingTrendsData}>
-            {/* Add Bar chart components here */}
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="value" fill="#8884d8" />
           </BarChart>
         </CardContent>
       </Card>
@@ -54,8 +61,23 @@ const AnalyticsContent: React.FC<AnalyticsContentProps> = ({ transactions }) => 
           <CardTitle>Category Analysis</CardTitle>
         </CardHeader>
         <CardContent>
-          <PieChart width={400} height={300} data={categoryData}>
-            {/* Add Pie chart components here */}
+          <PieChart width={400} height={300}>
+            <Pie
+              data={categoryData}
+              cx={200}
+              cy={150}
+              labelLine={false}
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              outerRadius={80}
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {categoryData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
           </PieChart>
         </CardContent>
       </Card>

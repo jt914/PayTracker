@@ -1,6 +1,4 @@
 import React from "react";
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 
 interface SidebarProps {
@@ -10,7 +8,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
   return (
-    <Card className="w-64 h-full rounded-none border-r">
+    <div className="w-64 h-full bg-background border-r">
       <div className="p-4">
         <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
           <TabsList className="grid w-full grid-cols-1 gap-2">
@@ -35,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
           </TabsList>
         </Tabs>
       </div>
-    </Card>
+    </div>
   );
 };
 
