@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent } from "./components/ui/tabs";
-import Sidebar from "./components/layout/Sidebar";
+import Sidebar from "./components/Sidebar";
 import Header from "./components/layout/Header";
 import DashboardContent from "./components/dashboard/DashboardContent";
 import AnalyticsContent from "./components/analytics/AnalyticsContent";
