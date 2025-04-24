@@ -42,7 +42,7 @@ class CardUpdateAnalyzer:
     def generate_impact_report(self) -> Dict[str, Any]:
         #Generate an impact analysis report including affected merchants and next payment dates.
 
-        affected = self.analyze_card_update({})
+        affected = self.analyze_card_update()
         next_payments = self.estimate_next_payments()
         report = {
             "affected_merchants": affected,

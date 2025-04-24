@@ -1,0 +1,6 @@
+date,merchant,amount,category
+2025-04-01,Netflix,15.99,Entertainment
+2025-04-02,Amazon,120.00,Shopping
+2025-04-03,Spotify,9.99,Music
+2025-04-04,Starbucks,4.50,Food
+2025-04-05,Uber,22.30,Transport

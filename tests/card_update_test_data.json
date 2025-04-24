@@ -1,0 +1,7 @@
+[
+  {"date": "2025-04-01", "merchant": "Netflix", "amount": 15.99, "category": "Entertainment"},
+  {"date": "2025-04-02", "merchant": "Amazon", "amount": 120.00, "category": "Shopping"},
+  {"date": "2025-04-03", "merchant": "Spotify", "amount": 9.99, "category": "Music"},
+  {"date": "2025-04-04", "merchant": "Starbucks", "amount": 4.50, "category": "Food"},
+  {"date": "2025-04-05", "merchant": "Uber", "amount": 22.30, "category": "Transport"}
+]
