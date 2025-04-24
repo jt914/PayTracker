@@ -1,4 +1,5 @@
 # Project Name
+PayTracker
 
 ## Overview
 This appears to be a Python project with a frontend component using Node.js/Next.js.
