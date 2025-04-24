@@ -93,7 +93,7 @@ def card_update():
 
     statement = Transaction.query.statement
     # ----- Reloads transactions from DB here -----
-    df = pd.read_sql(statement, db.session.bind)
+    df = pd.read_sql(statement, db.engine)
     transaction_processor.transactions = df
     transaction_processor.standardize_columns()
     transaction_processor.categorize_transactions()
@@ -138,12 +138,12 @@ def api_generate_sample_data():
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
-    df = pd.read_sql('SELECT * FROM transaction', db.session.bind)
+    df = pd.read_sql('SELECT * FROM transaction', db.engine)
     return df.to_json(orient="records")
 
 @app.route('/api/categories', methods=['GET'])
 def get_categories():
-    df = pd.read_sql('SELECT * FROM transaction', db.session.bind)
+    df = pd.read_sql('SELECT * FROM transaction', db.engine)
     if 'category' in df.columns:
         summary = df.groupby('category')['amount'].sum().to_dict()
         return jsonify(summary)
