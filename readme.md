@@ -2,11 +2,11 @@
 PayTracker
 
 ## Overview
-This appears to be a Python project with a frontend component using Node.js/Next.js.
+PayTracker is a transaction management system built with Python (Flask) backend and Node.js/Next.js frontend. It helps users track their recurring payments and notifies them when card updates are needed.
 
 ## Project Structure
-- Backend: Python-based
-- Frontend: Node.js/Next.js application
+- Backend: Flask-based Python application with SQLite database
+- Frontend: React/TypeScript application using Next.js
 
 ## Setup
 
@@ -24,7 +24,7 @@ pip install -r requirements.txt
 
 3. Run the backend server:
 ```bash
-python manage.py runserver
+python api/api.py
 ```
 
 ### Frontend Setup
@@ -42,13 +42,37 @@ npm run dev
 ## API Endpoints
 
 ### Backend API
-
-### Frontend API
+- `GET /api/transactions` - Retrieve all transactions
+- `POST /api/import-transactions` - Import transactions (CSV or JSON)
+- `POST /api/card-update` - Simulate card update and get affected merchants
+- `GET /api/notifications` - Get notification history
+- `GET /api/categories` - Get transaction categories summary
+- `GET /api/generate-sample-data` - Generate sample transaction data
 
 ## Database
+The application uses SQLite with SQLAlchemy ORM. The database schema includes:
 
+### Transaction Table
+- id (Primary Key)
+- date (String, required)
+- merchant (String, required)
+- amount (Float, required)
+- category (String, optional)
+
+### Notification Table
+- id (Primary Key)
+- merchants (String, required) - Comma-separated list of merchants
+- timestamp (DateTime, auto-generated)
+
+## Features
+- Transaction import and categorization
+- Recurring payment detection
+- Card update impact analysis
+- Notification system for card updates
+- Transaction categorization and reporting
 
 ## Contributing
+Contributions are welcome. Please follow the standard GitHub pull request process.
 
 MIT License
 
