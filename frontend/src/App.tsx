@@ -41,7 +41,7 @@ const App: React.FC = () => {
   const fetchTransactions = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("https://paytracker-2t7p.onrender.com/api/import-transactions");
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/import-transactions`);
       setTransactions(res.data.transactions);
       // Calculate recurring summary
       const recurring = res.data.transactions.filter((t: Transaction) => t.recurring).length;
@@ -56,7 +56,7 @@ const App: React.FC = () => {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get("https://paytracker-2t7p.onrender.com/api/notifications");
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/notifications`);
       setNotifications(res.data.notifications);
     } catch {
       setNotifications([]);
@@ -65,7 +65,7 @@ const App: React.FC = () => {
 
   const handleGenerateSample = async () => {
     setLoading(true);
-    await axios.post("https://paytracker-2t7p.onrender.com/api/generate-sample-data");
+    await axios.post(`${import.meta.env.VITE_API_BASE_URL}/generate-sample-data`);
     await fetchTransactions();
     setLoading(false);
   };
@@ -73,7 +73,7 @@ const App: React.FC = () => {
   const handleSimulateCardUpdate = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("https://paytracker-2t7p.onrender.com/api/card-update");
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/card-update`);
       setSimResult(res.data.affected_merchants || []);
       await fetchNotifications();
     } finally {
