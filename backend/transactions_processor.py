@@ -18,7 +18,7 @@ class TransactionProcessor:
         self.transactions = pd.read_json(data)
         self.standardize_columns()
     
-    def standard_columns(self) -> None:
+    def standardize_columns(self) -> None:
         # only lowercase the columns. Might add more in the future to remove whitespace
         self.transactions.columns = [col.lower() for col in self.transactions.columns]
 
