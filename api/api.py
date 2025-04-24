@@ -21,6 +21,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///paytrackr.db'
 #should improve performance
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+from flask_cors import CORS
+CORS(app, origins=[
+    "https://pay-tracker-gvrjdfpm9-jt914s-projects.vercel.app",
+    "http://localhost:5173"
+])
+
 db.init_app(app)
 
 with app.app_context():
