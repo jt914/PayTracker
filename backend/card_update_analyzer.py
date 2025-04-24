@@ -24,10 +24,10 @@ class CardUpdateAnalyzer:
 
         for merchant in recurring_merchants:
             merchant_transactions = df[df['merchant'] == merchant].sort_values('date')
-            last_transaction_date = merchant_transactions['date'].max()
+            last_transaction_date = pd.to_datetime(merchant_transactions['date'].max())
             #default to monthly
             if len(merchant_transactions) == 1:
-                next_payments[merchant] = (last_transaction_date + pd.Timedelta(days = 30)).date().isoformat()
+                next_payments[merchant] = (pd.Timestamp(last_transaction_date) + pd.Timedelta(days = 30)).date().isoformat()
 
             else:
                 # estimate interval as median difference
