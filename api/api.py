@@ -138,15 +138,8 @@ def api_generate_sample_data():
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
-    try:
-        df = pd.read_sql(Transaction.query.statement, db.engine)
-        return df.to_json(orient="records")
-    except Exception as e:
-        import traceback
-        return jsonify({
-            "error": str(e),
-            "traceback": traceback.format_exc()
-        }), 500
+    df = pd.read_sql(Transaction.query.statement, db.engine)
+    return df.to_json(orient="records")
 
 @app.route('/api/categories', methods=['GET'])
 def get_categories():
