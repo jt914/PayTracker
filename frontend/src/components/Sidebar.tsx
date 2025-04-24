@@ -14,13 +14,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
 
   return (
     <div className={cn(
-      "relative h-screen border-r bg-background transition-all duration-300",
+      "relative h-screen border-r bg-background transition-colors duration-100",
       isCollapsed ? "w-16" : "w-64"
     )}>
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-2 top-2"
+        className="absolute right-2 top-2 transition-colors duration-100"
         onClick={() => setIsCollapsed(!isCollapsed)}
       >
         <Menu className="h-4 w-4" />
@@ -32,15 +32,15 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
           onValueChange={onTabChange}
           orientation="vertical"
           className={cn(
-            "w-full",
+            "w-full transition-colors duration-100",
             isCollapsed ? "px-2" : "px-4"
           )}
         >
-          <TabsList className="flex flex-col h-full w-full">
+          <TabsList className="flex flex-col h-full w-full transition-colors duration-100">
             <TabsTrigger
               value="dashboard"
               className={cn(
-                "w-full justify-start gap-2",
+                "w-full justify-start gap-2 transition-colors duration-100",
                 isCollapsed && "justify-center"
               )}
             >
@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
             <TabsTrigger
               value="analytics"
               className={cn(
-                "w-full justify-start gap-2",
+                "w-full justify-start gap-2 transition-colors duration-100",
                 isCollapsed && "justify-center"
               )}
             >
@@ -58,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
             <TabsTrigger
               value="transactions"
               className={cn(
-                "w-full justify-start gap-2",
+                "w-full justify-start gap-2 transition-colors duration-100",
                 isCollapsed && "justify-center"
               )}
             >
@@ -67,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
             <TabsTrigger
               value="tracking"
               className={cn(
-                "w-full justify-start gap-2",
+                "w-full justify-start gap-2 transition-colors duration-100",
                 isCollapsed && "justify-center"
               )}
             >
@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
             <TabsTrigger
               value="notifications"
               className={cn(
-                "w-full justify-start gap-2",
+                "w-full justify-start gap-2 transition-colors duration-100",
                 isCollapsed && "justify-center"
               )}
             >
@@ -85,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
             <TabsTrigger
               value="settings"
               className={cn(
-                "w-full justify-start gap-2",
+                "w-full justify-start gap-2 transition-colors duration-100",
                 isCollapsed && "justify-center"
               )}
             >

@@ -1,8 +1,11 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { useTheme } from '../../context/ThemeContext';
 
 const SettingsContent: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card>
@@ -17,7 +20,9 @@ const SettingsContent: React.FC = () => {
             </div>
             <div className="flex items-center justify-between">
               <span>Dark Mode</span>
-              <Button variant="outline">Enable</Button>
+              <Button variant="outline" onClick={toggleTheme}>
+                {theme === 'dark' ? 'Disable' : 'Enable'}
+              </Button>
             </div>
           </div>
         </CardContent>
