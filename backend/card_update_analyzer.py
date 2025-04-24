@@ -27,7 +27,7 @@ class CardUpdateAnalyzer:
             last_transaction_date = merchant_transactions['date'].max()
             #default to monthly
             if len(merchant_transactions) == 1:
-                next_payments[merchant] = (last_transaction_date + pd.Timedelta(months = 1)).date().isoformat()
+                next_payments[merchant] = (last_transaction_date + pd.Timedelta(days = 30)).date().isoformat()
 
             else:
                 # estimate interval as median difference
