@@ -68,7 +68,7 @@ const App: React.FC = () => {
 
   const handleGenerateSample = async () => {
     setLoading(true);
-    await axios.post(`${import.meta.env.VITE_API_BASE_URL}/generate-sample-data`);
+    await axios.get(`${import.meta.env.VITE_API_BASE_URL}/generate-sample-data`);
     await fetchTransactions();
     setLoading(false);
   };

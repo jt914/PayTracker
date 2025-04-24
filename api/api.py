@@ -23,9 +23,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 from flask_cors import CORS
 CORS(app, origins=[
-    "https://pay-tracker-gvrjdfpm9-jt914s-projects.vercel.app",
+    r"https://pay-tracker-.*-jt914s-projects\.vercel\.app",  # Regex for Vercel previews
+    # Add your production domain here if you have one, e.g.:
+    # "https://your-production-domain.com", 
     "http://localhost:5173"
-])
+], supports_credentials=True) # Add supports_credentials=True if needed, and ensure regex=True is default or set
 
 db.init_app(app)
 
