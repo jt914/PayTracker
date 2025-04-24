@@ -1,5 +1,5 @@
 from typing import List, Dict, Any
-from transactions_processor import TransactionProcessor
+from backend.transactions_processor import TransactionProcessor
 import pandas as pd
 
 class CardUpdateAnalyzer:
