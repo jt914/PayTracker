@@ -90,7 +90,11 @@ def import_transactions():
     
     #wait to commit
     db.session.commit()
-    return jsonify({"status": "success"})
+    
+    # Return transactions in the format expected by the frontend
+    df = pd.read_sql(Transaction.query.statement, db.engine)
+    transactions_json = json.loads(df.to_json(orient="records"))
+    return jsonify({"status": "success", "transactions": transactions_json})
 
 
 
@@ -118,9 +122,13 @@ def card_update():
 def get_notifications():
     notifs = Notification.query.order_by(Notification.timestamp.desc()).all()
     notif_list = [
-        {"merchants": n.merchants.split(','), "timestamp": n.timestamp.isoformat()} for n in notifs
+        {
+            "id": str(n.id),
+            "message": f"Update card for merchants: {', '.join(n.merchants.split(','))}",
+            "date": n.timestamp.isoformat()
+        } for n in notifs
     ]
-    return jsonify(notif_list)
+    return jsonify({"notifications": notif_list})
 
 @app.route('/api/generate-sample-data', methods=['GET'])
 def api_generate_sample_data():
