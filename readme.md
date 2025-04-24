@@ -1,14 +1,46 @@
-# Project Name
-PayTracker
+# PayTracker
 
 ## Overview
-PayTracker is a transaction management system built with Python (Flask) backend and Node.js/Next.js frontend. It helps users track their recurring payments and notifies them when card updates are needed.
+PayTracker is a smart transaction management system designed to help users track and manage their recurring payments. It automatically identifies subscription services and notifies users when their credit card needs to be updated across multiple platforms.
+
+## The Problem PayTracker Solves
+When your credit card expires or is replaced, updating payment information across dozens of subscription services becomes a tedious, manual process. PayTracker simplifies this by:
+
+- Automatically identifying recurring payments in your transaction history
+- Predicting when each subscription will charge next
+- Generating impact reports when your card changes, showing which merchants need updates
+- Providing notifications to remind you which services require attention
+
+## Key Features
+- **Smart Transaction Categorization**: Automatically identifies and categorizes recurring payments
+- **Card Update Impact Analysis**: Shows which merchants need your new card information when a card changes
+- **Payment Prediction**: Uses transaction history to estimate when your next payment for each service will occur
+- **Notification System**: Alerts you about services that need attention
+- **Transaction Management**: Import, categorize, and visualize your spending patterns
+
+## Technology Stack
+- **Backend**: Python with Flask, pandas for data analysis, SQLAlchemy for ORM
+- **Frontend**: React/TypeScript with Vite, shadcn/ui components, and Recharts for data visualization
+- **Database**: SQL database with models for transactions and notifications
 
 ## Project Structure
-- Backend: Flask-based Python application with SQLite database
-- Frontend: React/TypeScript application using Next.js
+- `api/`: Flask API endpoints and database models
+- `backend/`: Core business logic components:
+  - `transactions_processor.py`: Handles transaction import and categorization
+  - `card_update_analyzer.py`: Analyzes recurring payments and predicts future charges
+  - `notifs_engine.py`: Manages the notification system
+- `frontend/`: React application with TypeScript, providing a modern dashboard UI
 
-## Setup
+## API Endpoints
+
+- `GET /api/transactions`: Retrieve all transactions
+- `POST /api/import-transactions`: Import transactions (CSV or JSON)
+- `POST /api/card-update`: Simulate card update and get affected merchants
+- `GET /api/notifications`: Get notification history
+- `GET /api/categories`: Get transaction categories summary
+- `GET /api/generate-sample-data`: Generate sample transaction data
+
+## Setup Instructions
 
 ### Backend Setup
 1. Create and activate a Python virtual environment:
@@ -39,41 +71,21 @@ npm install
 npm run dev
 ```
 
-## API Endpoints
+## Data Models
 
-### Backend API
-- `GET /api/transactions` - Retrieve all transactions
-- `POST /api/import-transactions` - Import transactions (CSV or JSON)
-- `POST /api/card-update` - Simulate card update and get affected merchants
-- `GET /api/notifications` - Get notification history
-- `GET /api/categories` - Get transaction categories summary
-- `GET /api/generate-sample-data` - Generate sample transaction data
+### Transaction
+- `id`: Primary Key
+- `date`: Transaction date
+- `merchant`: Merchant name
+- `amount`: Transaction amount
+- `category`: Transaction category (e.g., "Recurring", "Other")
 
-## Database
-The application uses SQLite with SQLAlchemy ORM. The database schema includes:
+### Notification
+- `id`: Primary Key
+- `merchants`: Comma-separated list of merchants affected by card update
+- `timestamp`: When the notification was created
 
-### Transaction Table
-- id (Primary Key)
-- date (String, required)
-- merchant (String, required)
-- amount (Float, required)
-- category (String, optional)
-
-### Notification Table
-- id (Primary Key)
-- merchants (String, required) - Comma-separated list of merchants
-- timestamp (DateTime, auto-generated)
-
-## Features
-- Transaction import and categorization
-- Recurring payment detection
-- Card update impact analysis
-- Notification system for card updates
-- Transaction categorization and reporting
-
-## Contributing
-Contributions are welcome. Please follow the standard GitHub pull request process.
-
+## License
 MIT License
 
 Copyright (c) 2024
