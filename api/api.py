@@ -138,12 +138,19 @@ def api_generate_sample_data():
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
-    df = pd.read_sql(Transaction.query.statement, db.session.bind)
-    return df.to_json(orient="records")
+    try:
+        df = pd.read_sql(Transaction.query.statement, db.engine)
+        return df.to_json(orient="records")
+    except Exception as e:
+        import traceback
+        return jsonify({
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }), 500
 
 @app.route('/api/categories', methods=['GET'])
 def get_categories():
-    df = pd.read_sql(Transaction.query.statement, db.session.bind)
+    df = pd.read_sql(Transaction.query.statement, db.engine)
     if 'category' in df.columns:
         summary = df.groupby('category')['amount'].sum().to_dict()
         return jsonify(summary)
