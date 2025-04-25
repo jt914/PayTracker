@@ -19,8 +19,8 @@ export const useNotifications = () => {
   const handleGenerateNotifications = async () => {
     setLoading(true);
     try {
-      await generateNotifications();
-      await loadNotifications();
+      const newNotifications = await generateNotifications();
+      setNotifications(newNotifications);
     } catch (error) {
       console.error("Error generating notifications:", error);
     } finally {

@@ -262,10 +262,10 @@ def generate_random_notification():
     notifications = []
     current_time = datetime.now()
     
-    # Generate notifications with decreasing timestamps (most recent first)
+    # Generate notifications with timestamps from today
     for i in range(3):
-        # Each notification is 1-3 hours apart
-        hours_ago = random.randint(1, 3) * (i + 1)
+        # Random time within the last 24 hours
+        hours_ago = random.randint(0, 23)
         minutes_ago = random.randint(0, 59)
         
         timestamp = current_time - timedelta(
