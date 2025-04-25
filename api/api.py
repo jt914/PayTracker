@@ -54,11 +54,54 @@ with app.app_context():
 
 def generate_sample_data():
     data = [
+        # Recurring Subscriptions
         {"date": "2025-03-01", "merchant": "Netflix", "amount": 15.99},
-        {"date": "2025-03-15", "merchant": "Spotify", "amount": 9.99},
         {"date": "2025-04-01", "merchant": "Netflix", "amount": 15.99},
+        {"date": "2025-05-01", "merchant": "Netflix", "amount": 15.99},
+        {"date": "2025-03-15", "merchant": "Spotify", "amount": 9.99},
         {"date": "2025-04-15", "merchant": "Spotify", "amount": 9.99},
-        {"date": "2025-04-20", "merchant": "Amazon", "amount": 100.00},
+        {"date": "2025-05-15", "merchant": "Spotify", "amount": 9.99},
+        {"date": "2025-03-10", "merchant": "Hulu", "amount": 12.99},
+        {"date": "2025-04-10", "merchant": "Hulu", "amount": 12.99},
+        {"date": "2025-05-10", "merchant": "Hulu", "amount": 12.99},
+        {"date": "2025-03-05", "merchant": "Amazon Prime", "amount": 14.99},
+        {"date": "2025-04-05", "merchant": "Amazon Prime", "amount": 14.99},
+        {"date": "2025-05-05", "merchant": "Amazon Prime", "amount": 14.99},
+        
+        # Shopping
+        {"date": "2025-03-02", "merchant": "Amazon", "amount": 156.78},
+        {"date": "2025-03-15", "merchant": "Target", "amount": 89.99},
+        {"date": "2025-04-03", "merchant": "Walmart", "amount": 234.56},
+        {"date": "2025-04-18", "merchant": "Best Buy", "amount": 499.99},
+        {"date": "2025-05-01", "merchant": "Amazon", "amount": 78.45},
+        {"date": "2025-05-12", "merchant": "Target", "amount": 145.67},
+        
+        # Dining
+        {"date": "2025-03-03", "merchant": "Starbucks", "amount": 6.75},
+        {"date": "2025-03-10", "merchant": "Chipotle", "amount": 15.47},
+        {"date": "2025-03-17", "merchant": "Local Restaurant", "amount": 45.82},
+        {"date": "2025-04-05", "merchant": "Starbucks", "amount": 7.25},
+        {"date": "2025-04-12", "merchant": "Subway", "amount": 12.99},
+        {"date": "2025-04-20", "merchant": "Local Restaurant", "amount": 68.53},
+        {"date": "2025-05-02", "merchant": "Starbucks", "amount": 6.75},
+        {"date": "2025-05-09", "merchant": "Chipotle", "amount": 16.82},
+        {"date": "2025-05-16", "merchant": "Local Restaurant", "amount": 52.43},
+        
+        # Utilities
+        {"date": "2025-03-01", "merchant": "Electric Company", "amount": 145.32},
+        {"date": "2025-04-01", "merchant": "Electric Company", "amount": 168.45},
+        {"date": "2025-05-01", "merchant": "Electric Company", "amount": 157.89},
+        {"date": "2025-03-05", "merchant": "Water Utility", "amount": 78.45},
+        {"date": "2025-04-05", "merchant": "Water Utility", "amount": 82.34},
+        {"date": "2025-05-05", "merchant": "Water Utility", "amount": 75.67},
+        
+        # Transportation
+        {"date": "2025-03-08", "merchant": "Gas Station", "amount": 45.67},
+        {"date": "2025-03-22", "merchant": "Gas Station", "amount": 48.92},
+        {"date": "2025-04-07", "merchant": "Gas Station", "amount": 52.34},
+        {"date": "2025-04-21", "merchant": "Gas Station", "amount": 49.87},
+        {"date": "2025-05-06", "merchant": "Gas Station", "amount": 51.23},
+        {"date": "2025-05-20", "merchant": "Gas Station", "amount": 47.89}
     ]
     df = pd.DataFrame(data)
     return df.to_json(orient="records")
@@ -101,7 +144,6 @@ def import_transactions():
             category=row.get('category', None)
         )
         db.session.add(t)
-    
     #wait to commit
     db.session.commit()
     
