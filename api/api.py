@@ -100,14 +100,14 @@ def generate_sample_data():
         transactions.append({
             "date": random_date.strftime("%Y-%m-%d"),
             "merchant": merchant,
-            "amount": amount
+            "amount": amount,
+            "category": category
         })
     
     # Sort transactions by date
     transactions.sort(key=lambda x: x["date"])
     
-    df = pd.DataFrame(transactions)
-    return df.to_json(orient="records")
+    return transactions
 
 
 
@@ -191,23 +191,27 @@ def get_notifications():
 
 @app.route('/api/generate-sample-data', methods=['GET'])
 def api_generate_sample_data():
-    data_json = generate_sample_data()
-    df = pd.read_json(io.StringIO(data_json))
-    df.columns = [col.lower() for col in df.columns]
-    transaction_processor.transactions = df
-    transaction_processor.categorize_transactions()
+    # Generate new random transactions
+    transactions = generate_sample_data()
+    
+    # Clear existing transactions
     Transaction.query.delete()
     db.session.commit()
-    for _, row in df.iterrows():
+    
+    # Add new transactions to database
+    for transaction in transactions:
         t = Transaction(
-            date=str(row['date']),
-            merchant=row['merchant'],
-            amount=float(row['amount']),
-            category=row.get('category', None)
+            date=transaction['date'],
+            merchant=transaction['merchant'],
+            amount=float(transaction['amount']),
+            category=transaction['category']
         )
         db.session.add(t)
+    
     db.session.commit()
-    return jsonify({"status": "sample data loaded"})
+    
+    # Return the generated transactions
+    return jsonify({"status": "success", "transactions": transactions})
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
