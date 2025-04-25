@@ -237,7 +237,9 @@ def clear_data():
         # Clear all transactions
         Transaction.query.delete()
         db.session.commit()
-        return jsonify({"status": "success", "message": "All data cleared successfully"})
+        
+        # Return empty transactions list to ensure frontend state is cleared
+        return jsonify({"status": "success", "transactions": []})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 

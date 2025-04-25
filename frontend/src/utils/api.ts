@@ -23,5 +23,6 @@ export const simulateCardUpdate = async () => {
 };
 
 export const clearData = async () => {
-  await axios.post(`${API_BASE_URL}/clear-data`);
+  const res = await axios.post(`${API_BASE_URL}/clear-data`);
+  return res.data.transactions || [];
 }; 

@@ -46,7 +46,12 @@ export const useTransactions = () => {
     setLoading(true);
     try {
       await clearData();
-      await loadTransactions();
+      // Reset all state
+      setTransactions([]);
+      setRecurringSummary({ recurring: 0, nonRecurring: 0 });
+      setSimResult([]);
+    } catch (error) {
+      console.error("Error clearing data:", error);
     } finally {
       setLoading(false);
     }
