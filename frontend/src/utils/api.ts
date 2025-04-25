@@ -20,4 +20,8 @@ export const generateSampleData = async () => {
 export const simulateCardUpdate = async () => {
   const res = await axios.post(`${API_BASE_URL}/card-update`);
   return res.data.affected_merchants || [];
+};
+
+export const clearData = async () => {
+  await axios.post(`${API_BASE_URL}/clear-data`);
 }; 

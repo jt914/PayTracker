@@ -231,6 +231,16 @@ def get_categories():
         return jsonify(summary)
     return jsonify({})
 
+@app.route('/api/clear-data', methods=['POST'])
+def clear_data():
+    try:
+        # Clear all transactions
+        Transaction.query.delete()
+        db.session.commit()
+        return jsonify({"status": "success", "message": "All data cleared successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
