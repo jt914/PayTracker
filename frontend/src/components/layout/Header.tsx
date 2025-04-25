@@ -6,6 +6,7 @@ interface HeaderProps {
   simResult: string[];
   onGenerateSample: () => void;
   onSimulateCardUpdate: () => void;
+  onClearData: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -13,6 +14,7 @@ const Header: React.FC<HeaderProps> = ({
   simResult,
   onGenerateSample,
   onSimulateCardUpdate,
+  onClearData,
 }) => {
   return (
     <header className="p-4 border-b">
@@ -24,6 +26,7 @@ const Header: React.FC<HeaderProps> = ({
         <div className="flex gap-2">
           <Button onClick={onGenerateSample} disabled={loading}>Generate Sample Data</Button>
           <Button onClick={onSimulateCardUpdate} disabled={loading}>Simulate Card Update</Button>
+          <Button variant="destructive" onClick={onClearData} disabled={loading}>Clear Data</Button>
         </div>
       </div>
       {simResult.length > 0 && (
