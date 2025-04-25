@@ -25,11 +25,16 @@ const NotificationsContent: React.FC<NotificationsContentProps> = ({ notificatio
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
+  // Sort notifications by date (most recent first) and take only the last 3
+  const recentNotifications = [...notifications]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 3);
+
   return (
     <div className={`rounded p-4 shadow ${isDark ? 'bg-card text-card-foreground' : 'bg-white'}`}>
       <h2 className="font-semibold mb-2">Notification Center</h2>
       <ul>
-        {notifications.map((n) => (
+        {recentNotifications.map((n) => (
           <li key={n.id} className="mb-2">
             <Card>
               <CardHeader>
