@@ -194,11 +194,7 @@ def api_generate_sample_data():
     # Generate new random transactions
     transactions = generate_sample_data()
     
-    # Clear existing transactions
-    Transaction.query.delete()
-    db.session.commit()
-    
-    # Add new transactions to database
+    # Add new transactions to database without clearing existing ones
     for transaction in transactions:
         t = Transaction(
             date=transaction['date'],
@@ -210,8 +206,17 @@ def api_generate_sample_data():
     
     db.session.commit()
     
-    # Return the generated transactions
-    return jsonify({"status": "success", "transactions": transactions})
+    # Get all transactions including the new ones
+    all_transactions = Transaction.query.order_by(Transaction.date).all()
+    transactions_data = [{
+        "date": t.date,
+        "merchant": t.merchant,
+        "amount": t.amount,
+        "category": t.category
+    } for t in all_transactions]
+    
+    # Return all transactions including the new ones
+    return jsonify({"status": "success", "transactions": transactions_data})
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
