@@ -258,23 +258,32 @@ def generate_random_notification():
         "Gas Company", "Internet Provider"
     ]
     
-    # Generate 1-3 random notifications
-    num_notifications = random.randint(1, 3)
+    # Always generate 3 notifications
     notifications = []
+    current_time = datetime.now()
     
-    for _ in range(num_notifications):
+    # Generate notifications with decreasing timestamps (most recent first)
+    for i in range(3):
+        # Each notification is 1-3 hours apart
+        hours_ago = random.randint(1, 3) * (i + 1)
+        minutes_ago = random.randint(0, 59)
+        
+        timestamp = current_time - timedelta(
+            hours=hours_ago,
+            minutes=minutes_ago
+        )
+        
         merchant = random.choice(merchants)
         message = random.choice(notification_types).format(merchant=merchant)
-        timestamp = datetime.now() - timedelta(
-            hours=random.randint(0, 24),
-            minutes=random.randint(0, 59)
-        )
         
         notifications.append({
             "message": message,
             "merchants": merchant,
             "timestamp": timestamp
         })
+    
+    # Sort by timestamp (most recent first)
+    notifications.sort(key=lambda x: x["timestamp"], reverse=True)
     
     return notifications
 

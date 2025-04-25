@@ -32,10 +32,9 @@ const NotificationsContent: React.FC<NotificationsContentProps> = ({
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
-  // Sort notifications by date (most recent first) and take only the last 3
-  const recentNotifications = [...notifications]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 3);
+  // Sort notifications by date (most recent first)
+  const sortedNotifications = [...notifications]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
     <div className={`rounded p-4 shadow ${isDark ? 'bg-card text-card-foreground' : 'bg-white'}`}>
@@ -46,27 +45,31 @@ const NotificationsContent: React.FC<NotificationsContentProps> = ({
           disabled={loading}
           variant="outline"
         >
-          Generate Notifications
+          {loading ? "Generating..." : "Generate Notifications"}
         </Button>
       </div>
-      <ul>
-        {recentNotifications.map((n) => (
-          <li key={n.id} className="mb-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>{n.message}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className={`text-xs ${isDark ? 'text-muted-foreground' : 'text-gray-400'}`}>
-                  <span>{formatDateTime(n.date).formattedDate}</span>
-                  <span className="mx-2">•</span>
-                  <span>{formatDateTime(n.date).formattedTime}</span>
-                </div>
-              </CardContent>
-            </Card>
-          </li>
-        ))}
-      </ul>
+      {sortedNotifications.length === 0 ? (
+        <p className="text-center text-muted-foreground">No notifications yet</p>
+      ) : (
+        <ul>
+          {sortedNotifications.map((n) => (
+            <li key={n.id} className="mb-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>{n.message}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className={`text-xs ${isDark ? 'text-muted-foreground' : 'text-gray-400'}`}>
+                    <span>{formatDateTime(n.date).formattedDate}</span>
+                    <span className="mx-2">•</span>
+                    <span>{formatDateTime(n.date).formattedTime}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
