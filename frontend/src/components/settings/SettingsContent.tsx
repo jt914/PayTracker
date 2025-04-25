@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { useTheme } from '../../context/ThemeContext';
+import { Sun, Moon } from 'lucide-react';
 
 const SettingsContent: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -20,8 +21,12 @@ const SettingsContent: React.FC = () => {
             </div>
             <div className="flex items-center justify-between">
               <span>Dark Mode</span>
-              <Button variant="outline" onClick={toggleTheme}>
-                {theme === 'dark' ? 'Disable' : 'Enable'}
+              <Button variant="outline" size="icon" onClick={toggleTheme}>
+                {theme === 'dark' ? (
+                  <Moon className="h-4 w-4" />
+                ) : (
+                  <Sun className="h-4 w-4" />
+                )}
               </Button>
             </div>
           </div>
