@@ -14,24 +14,12 @@ interface DashboardContentProps {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
-const PieChartTooltip = ({ active, payload, isDark }: any) => {
+const CustomTooltip = ({ active, payload, isDark }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className={`p-3 rounded-lg shadow-lg ${isDark ? 'bg-[#1a1a1a] border border-[#333] text-white' : 'bg-white border border-gray-200 text-black'}`}>
         <p className="font-medium">{payload[0].name}</p>
         <p>Value: {payload[0].value}</p>
-      </div>
-    );
-  }
-  return null;
-};
-
-const BarChartTooltip = ({ active, payload, isDark }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className={`p-3 rounded-lg shadow-lg ${isDark ? 'bg-[#1a1a1a] border border-[#333] text-white' : 'bg-white border border-gray-200 text-black'}`}>
-        <p className="font-medium">{payload[0].name}</p>
-        <p>Transactions: {payload[0].value}</p>
       </div>
     );
   }
@@ -118,7 +106,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip content={<PieChartTooltip isDark={isDark} />} />
+                  <Tooltip content={<CustomTooltip isDark={isDark} />} />
                   <Legend 
                     wrapperStyle={{
                       color: isDark ? '#fff' : '#000',
@@ -149,7 +137,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                     stroke={isDark ? '#fff' : '#000'}
                     tick={{ fill: isDark ? '#fff' : '#000' }}
                   />
-                  <Tooltip content={<BarChartTooltip isDark={isDark} />} />
+                  <Tooltip content={<CustomTooltip isDark={isDark} />} />
                   <Legend 
                     wrapperStyle={{
                       color: isDark ? '#fff' : '#000',
