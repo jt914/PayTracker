@@ -55,12 +55,12 @@ with app.app_context():
 def generate_sample_data():
     data = [
         # Recurring Subscriptions
-        {"date": "2025-03-01", "merchant": "Netflix", "amount": 15.99},
+        {"date": "2025-03-01", "merchant": "Netflix", "amount": 14.99},
         {"date": "2025-04-01", "merchant": "Netflix", "amount": 15.99},
         {"date": "2025-05-01", "merchant": "Netflix", "amount": 15.99},
         {"date": "2025-03-15", "merchant": "Spotify", "amount": 9.99},
         {"date": "2025-04-15", "merchant": "Spotify", "amount": 9.99},
-        {"date": "2025-05-15", "merchant": "Spotify", "amount": 9.99},
+        {"date": "2025-05-15", "merchant": "Spotify", "amount": 10.99},
         {"date": "2025-03-10", "merchant": "Hulu", "amount": 12.99},
         {"date": "2025-04-10", "merchant": "Hulu", "amount": 12.99},
         {"date": "2025-05-10", "merchant": "Hulu", "amount": 12.99},
