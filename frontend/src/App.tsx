@@ -20,7 +20,6 @@ const App: React.FC = () => {
     simResult,
     handleGenerateSample,
     handleSimulateCardUpdate,
-    handleClearData,
   } = useTransactions();
   const { notifications } = useNotifications();
 
@@ -34,7 +33,6 @@ const App: React.FC = () => {
           simResult={simResult}
           onGenerateSample={handleGenerateSample}
           onSimulateCardUpdate={handleSimulateCardUpdate}
-          onClearData={handleClearData}
         />
 
         <main className="p-4">

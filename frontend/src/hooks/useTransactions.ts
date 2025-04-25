@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Transaction, RecurringSummary } from '../types';
-import { fetchTransactions, generateSampleData, simulateCardUpdate, clearData } from '../utils/api';
+import { fetchTransactions, generateSampleData, simulateCardUpdate } from '../utils/api';
 
 export const useTransactions = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -42,16 +42,6 @@ export const useTransactions = () => {
     }
   };
 
-  const handleClearData = async () => {
-    setLoading(true);
-    try {
-      await clearData();
-      await loadTransactions();
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     loadTransactions();
   }, []);
@@ -63,7 +53,6 @@ export const useTransactions = () => {
     simResult,
     handleGenerateSample,
     handleSimulateCardUpdate,
-    handleClearData,
     loadTransactions
   };
 }; 
