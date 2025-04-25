@@ -143,7 +143,11 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                       color: isDark ? '#fff' : '#000',
                     }}
                   />
-                  <Bar dataKey="value" fill="#8884d8" />
+                  <Bar 
+                    dataKey="value" 
+                    fill="#8884d8"
+                    className="hover:fill-[#8884d8]/80"
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
