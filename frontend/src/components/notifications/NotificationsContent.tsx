@@ -1,14 +1,18 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Notification } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
 
 interface NotificationsContentProps {
   notifications: Notification[];
 }
 
 const NotificationsContent: React.FC<NotificationsContentProps> = ({ notifications }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   return (
-    <div className="bg-white rounded p-4 shadow">
+    <div className={`rounded p-4 shadow ${isDark ? 'bg-card text-card-foreground' : 'bg-white'}`}>
       <h2 className="font-semibold mb-2">Notification Center</h2>
       <ul>
         {notifications.map((n) => (
@@ -18,7 +22,7 @@ const NotificationsContent: React.FC<NotificationsContentProps> = ({ notificatio
                 <CardTitle>{n.message}</CardTitle>
               </CardHeader>
               <CardContent>
-                <span className="text-xs text-gray-400">{n.date}</span>
+                <span className={`text-xs ${isDark ? 'text-muted-foreground' : 'text-gray-400'}`}>{n.date}</span>
               </CardContent>
             </Card>
           </li>
