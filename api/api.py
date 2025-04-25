@@ -5,6 +5,8 @@ import sys
 import pandas as pd
 import io
 import json
+import random
+from datetime import datetime, timedelta
 
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -53,57 +55,58 @@ with app.app_context():
     db.create_all()
 
 def generate_sample_data():
-    data = [
-        # Recurring Subscriptions
-        {"date": "2025-03-01", "merchant": "Netflix", "amount": 14.99},
-        {"date": "2025-04-01", "merchant": "Netflix", "amount": 15.99},
-        {"date": "2025-05-01", "merchant": "Netflix", "amount": 15.99},
-        {"date": "2025-03-15", "merchant": "Spotify", "amount": 9.99},
-        {"date": "2025-04-15", "merchant": "Spotify", "amount": 9.99},
-        {"date": "2025-05-15", "merchant": "Spotify", "amount": 10.99},
-        {"date": "2025-03-10", "merchant": "Hulu", "amount": 12.99},
-        {"date": "2025-04-10", "merchant": "Hulu", "amount": 12.99},
-        {"date": "2025-05-10", "merchant": "Hulu", "amount": 12.99},
-        {"date": "2025-03-05", "merchant": "Amazon Prime", "amount": 14.99},
-        {"date": "2025-04-05", "merchant": "Amazon Prime", "amount": 14.99},
-        {"date": "2025-05-05", "merchant": "Amazon Prime", "amount": 14.99},
+    # Define pools of realistic data
+    merchants = {
+        'Subscriptions': ['Netflix', 'Spotify', 'Hulu', 'Amazon Prime', 'Disney+', 'Apple Music'],
+        'Shopping': ['Amazon', 'Target', 'Walmart', 'Best Buy', 'Costco', 'Whole Foods'],
+        'Dining': ['Starbucks', 'Chipotle', 'Subway', 'Local Restaurant', 'McDonalds', 'Pizza Hut'],
+        'Utilities': ['Electric Company', 'Water Utility', 'Gas Company', 'Internet Provider'],
+        'Transportation': ['Gas Station', 'Uber', 'Lyft', 'Public Transit']
+    }
+    
+    # Amount ranges for different categories
+    amount_ranges = {
+        'Subscriptions': (9.99, 19.99),
+        'Shopping': (25.00, 299.99),
+        'Dining': (5.99, 75.00),
+        'Utilities': (50.00, 200.00),
+        'Transportation': (15.00, 60.00)
+    }
+    
+    # Generate 5-8 random transactions
+    num_transactions = random.randint(5, 8)
+    transactions = []
+    
+    # Generate random dates within last 30 days
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=30)
+    
+    for _ in range(num_transactions):
+        # Pick random category and merchant
+        category = random.choice(list(merchants.keys()))
+        merchant = random.choice(merchants[category])
         
-        # Shopping
-        {"date": "2025-03-02", "merchant": "Amazon", "amount": 156.78},
-        {"date": "2025-03-15", "merchant": "Target", "amount": 89.99},
-        {"date": "2025-04-03", "merchant": "Walmart", "amount": 234.56},
-        {"date": "2025-04-18", "merchant": "Best Buy", "amount": 499.99},
-        {"date": "2025-05-01", "merchant": "Amazon", "amount": 78.45},
-        {"date": "2025-05-12", "merchant": "Target", "amount": 145.67},
+        # Generate random amount within category range
+        min_amount, max_amount = amount_ranges[category]
+        amount = round(random.uniform(min_amount, max_amount), 2)
         
-        # Dining
-        {"date": "2025-03-03", "merchant": "Starbucks", "amount": 6.75},
-        {"date": "2025-03-10", "merchant": "Chipotle", "amount": 15.47},
-        {"date": "2025-03-17", "merchant": "Local Restaurant", "amount": 45.82},
-        {"date": "2025-04-05", "merchant": "Starbucks", "amount": 7.25},
-        {"date": "2025-04-12", "merchant": "Subway", "amount": 12.99},
-        {"date": "2025-04-20", "merchant": "Local Restaurant", "amount": 68.53},
-        {"date": "2025-05-02", "merchant": "Starbucks", "amount": 6.75},
-        {"date": "2025-05-09", "merchant": "Chipotle", "amount": 16.82},
-        {"date": "2025-05-16", "merchant": "Local Restaurant", "amount": 52.43},
+        # Generate random date
+        random_date = start_date + timedelta(
+            days=random.randint(0, 30),
+            hours=random.randint(0, 23),
+            minutes=random.randint(0, 59)
+        )
         
-        # Utilities
-        {"date": "2025-03-01", "merchant": "Electric Company", "amount": 145.32},
-        {"date": "2025-04-01", "merchant": "Electric Company", "amount": 168.45},
-        {"date": "2025-05-01", "merchant": "Electric Company", "amount": 157.89},
-        {"date": "2025-03-05", "merchant": "Water Utility", "amount": 78.45},
-        {"date": "2025-04-05", "merchant": "Water Utility", "amount": 82.34},
-        {"date": "2025-05-05", "merchant": "Water Utility", "amount": 75.67},
-        
-        # Transportation
-        {"date": "2025-03-08", "merchant": "Gas Station", "amount": 45.67},
-        {"date": "2025-03-22", "merchant": "Gas Station", "amount": 48.92},
-        {"date": "2025-04-07", "merchant": "Gas Station", "amount": 52.34},
-        {"date": "2025-04-21", "merchant": "Gas Station", "amount": 49.87},
-        {"date": "2025-05-06", "merchant": "Gas Station", "amount": 51.23},
-        {"date": "2025-05-20", "merchant": "Gas Station", "amount": 47.89}
-    ]
-    df = pd.DataFrame(data)
+        transactions.append({
+            "date": random_date.strftime("%Y-%m-%d"),
+            "merchant": merchant,
+            "amount": amount
+        })
+    
+    # Sort transactions by date
+    transactions.sort(key=lambda x: x["date"])
+    
+    df = pd.DataFrame(transactions)
     return df.to_json(orient="records")
 
 
