@@ -1,10 +1,13 @@
 import React from 'react';
+import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Notification } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 
 interface NotificationsContentProps {
   notifications: Notification[];
+  loading: boolean;
+  onGenerateNotifications: () => void;
 }
 
 const formatDateTime = (dateString: string) => {
@@ -21,7 +24,11 @@ const formatDateTime = (dateString: string) => {
   return { formattedDate, formattedTime };
 };
 
-const NotificationsContent: React.FC<NotificationsContentProps> = ({ notifications }) => {
+const NotificationsContent: React.FC<NotificationsContentProps> = ({ 
+  notifications, 
+  loading,
+  onGenerateNotifications 
+}) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
@@ -32,7 +39,16 @@ const NotificationsContent: React.FC<NotificationsContentProps> = ({ notificatio
 
   return (
     <div className={`rounded p-4 shadow ${isDark ? 'bg-card text-card-foreground' : 'bg-white'}`}>
-      <h2 className="font-semibold mb-2">Notification Center</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="font-semibold">Notification Center</h2>
+        <Button 
+          onClick={onGenerateNotifications} 
+          disabled={loading}
+          variant="outline"
+        >
+          Generate Notifications
+        </Button>
+      </div>
       <ul>
         {recentNotifications.map((n) => (
           <li key={n.id} className="mb-2">

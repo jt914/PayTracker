@@ -243,6 +243,67 @@ def clear_data():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+def generate_random_notification():
+    notification_types = [
+        "Card update required for {merchant}",
+        "Unusual spending detected at {merchant}",
+        "Subscription price increase at {merchant}",
+        "Payment failed for {merchant}",
+        "New recurring payment detected at {merchant}"
+    ]
+    
+    merchants = [
+        "Netflix", "Spotify", "Amazon", "Hulu", "Disney+",
+        "Apple Music", "Electric Company", "Water Utility",
+        "Gas Company", "Internet Provider"
+    ]
+    
+    # Generate 1-3 random notifications
+    num_notifications = random.randint(1, 3)
+    notifications = []
+    
+    for _ in range(num_notifications):
+        merchant = random.choice(merchants)
+        message = random.choice(notification_types).format(merchant=merchant)
+        timestamp = datetime.now() - timedelta(
+            hours=random.randint(0, 24),
+            minutes=random.randint(0, 59)
+        )
+        
+        notifications.append({
+            "message": message,
+            "merchants": merchant,
+            "timestamp": timestamp
+        })
+    
+    return notifications
+
+@app.route('/api/generate-notifications', methods=['POST'])
+def generate_notifications():
+    try:
+        # Clear existing notifications
+        Notification.query.delete()
+        db.session.commit()
+        
+        # Generate new notifications
+        notifications = generate_random_notification()
+        
+        # Save to database
+        for notif in notifications:
+            n = Notification(
+                message=notif["message"],
+                merchants=notif["merchants"],
+                timestamp=notif["timestamp"]
+            )
+            db.session.add(n)
+        
+        db.session.commit()
+        
+        # Return the new notifications
+        return jsonify({"status": "success", "notifications": notifications})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)

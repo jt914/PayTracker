@@ -16,13 +16,17 @@ const App: React.FC = () => {
   const {
     transactions,
     recurringSummary,
-    loading,
+    loading: transactionsLoading,
     simResult,
     handleGenerateSample,
     handleSimulateCardUpdate,
     handleClearData,
   } = useTransactions();
-  const { notifications } = useNotifications();
+  const { 
+    notifications, 
+    loading: notificationsLoading,
+    handleGenerateNotifications 
+  } = useNotifications();
 
   return (
     <div className="flex h-screen bg-background">
@@ -30,7 +34,7 @@ const App: React.FC = () => {
       
       <div className="flex-1 overflow-auto">
         <Header
-          loading={loading}
+          loading={transactionsLoading}
           simResult={simResult}
           onGenerateSample={handleGenerateSample}
           onSimulateCardUpdate={handleSimulateCardUpdate}
@@ -59,7 +63,11 @@ const App: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="notifications">
-              <NotificationsContent notifications={notifications} />
+              <NotificationsContent 
+                notifications={notifications} 
+                loading={notificationsLoading}
+                onGenerateNotifications={handleGenerateNotifications}
+              />
             </TabsContent>
 
             <TabsContent value="settings">
