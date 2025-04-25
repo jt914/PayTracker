@@ -308,8 +308,16 @@ def generate_notifications():
         
         db.session.commit()
         
-        # Return the new notifications
-        return jsonify({"status": "success", "notifications": notifications})
+        # Get all notifications from database to return
+        all_notifications = Notification.query.order_by(Notification.timestamp.desc()).all()
+        notifications_data = [{
+            "id": str(n.id),
+            "message": n.message,
+            "date": n.timestamp.isoformat(),
+            "merchants": n.merchants
+        } for n in all_notifications]
+        
+        return jsonify({"notifications": notifications_data})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
