@@ -14,6 +14,18 @@ interface DashboardContentProps {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
+const CustomTooltip = ({ active, payload, isDark }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className={`p-3 rounded-lg shadow-lg ${isDark ? 'bg-[#1a1a1a] border border-[#333] text-white' : 'bg-white border border-gray-200 text-black'}`}>
+        <p className="font-medium">{payload[0].name}</p>
+        <p>Value: {payload[0].value}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const DashboardContent: React.FC<DashboardContentProps> = ({
   recurringSummary,
   transactions,
@@ -94,13 +106,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip 
-                    contentStyle={{
-                      backgroundColor: isDark ? '#1a1a1a' : '#fff',
-                      border: isDark ? '1px solid #333' : '1px solid #ccc',
-                      color: isDark ? '#fff' : '#000',
-                    }}
-                  />
+                  <Tooltip content={<CustomTooltip isDark={isDark} />} />
                   <Legend 
                     wrapperStyle={{
                       color: isDark ? '#fff' : '#000',
@@ -131,13 +137,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                     stroke={isDark ? '#fff' : '#000'}
                     tick={{ fill: isDark ? '#fff' : '#000' }}
                   />
-                  <Tooltip 
-                    contentStyle={{
-                      backgroundColor: isDark ? '#1a1a1a' : '#fff',
-                      border: isDark ? '1px solid #333' : '1px solid #ccc',
-                      color: isDark ? '#fff' : '#000',
-                    }}
-                  />
+                  <Tooltip content={<CustomTooltip isDark={isDark} />} />
                   <Legend 
                     wrapperStyle={{
                       color: isDark ? '#fff' : '#000',
