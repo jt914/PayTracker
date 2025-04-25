@@ -6,7 +6,10 @@ import { useTheme } from '../../context/ThemeContext';
 
 interface DashboardContentProps {
   recurringSummary: RecurringSummary;
-  transactions: any[];
+  transactions: Array<{
+    category: string;
+    amount: number;
+  }>;
 }
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
@@ -27,20 +30,19 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
     return acc;
   }, {} as Record<string, number>);
 
-  const spendingData = Object.entries(spendingBreakdown).map(([name, value]) => ({
-    name,
-    value
-  }));
+  const totalSpending = Object.values(spendingBreakdown).reduce((sum, amount) => sum + amount, 0);
+  const spendingData = Object.entries(spendingBreakdown)
+    .map(([name, value]) => ({
+      name,
+      value,
+      percentage: (value / totalSpending) * 100
+    }))
+    .sort((a, b) => b.value - a.value);
 
   const chartData = [
     { name: "Recurring", value: recurringSummary.recurring },
     { name: "Non-Recurring", value: recurringSummary.nonRecurring },
   ];
-
-  const chartStyle = {
-    backgroundColor: isDark ? '#1a1a1a' : '#fff',
-    color: isDark ? '#fff' : '#000',
-  };
 
   return (
     <>
@@ -76,7 +78,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
             <CardTitle>Spending Breakdown</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px]">
+            <div className="h-[300px] flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -84,20 +86,9 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    outerRadius={80}
+                    outerRadius={100}
                     fill="#8884d8"
                     dataKey="value"
-                    label={({ name, percent }) => (
-                      <text
-                        x={0}
-                        y={0}
-                        dy={8}
-                        textAnchor="middle"
-                        fill={isDark ? '#fff' : '#000'}
-                      >
-                        {`${name} ${(percent * 100).toFixed(0)}%`}
-                      </text>
-                    )}
                   >
                     {spendingData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
