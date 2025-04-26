@@ -215,8 +215,17 @@ def api_generate_sample_data():
     
     db.session.commit()
     
-    # Return success status
-    return jsonify({"status": "success"})
+    # Get all transactions to return
+    all_transactions = Transaction.query.order_by(Transaction.date).all()
+    transactions_data = [{
+        "date": t.date,
+        "merchant": t.merchant,
+        "amount": t.amount,
+        "category": t.category,
+        "recurring": t.recurring
+    } for t in all_transactions]
+    
+    return jsonify({"status": "success", "transactions": transactions_data})
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
