@@ -97,17 +97,21 @@ def generate_sample_data():
             minutes=random.randint(0, 59)
         )
         
+        # Determine if transaction is recurring based on category
+        is_recurring = category in ['Subscriptions', 'Utilities']
+        
         transactions.append({
             "date": random_date.strftime("%Y-%m-%d"),
             "merchant": merchant,
             "amount": amount,
-            "category": category
+            "category": category,
+            "recurring": is_recurring
         })
     
     # Sort transactions by date
     transactions.sort(key=lambda x: x["date"])
     
-    return transactions
+    return json.dumps(transactions)
 
 
 
@@ -191,32 +195,24 @@ def get_notifications():
 
 @app.route('/api/generate-sample-data', methods=['GET'])
 def api_generate_sample_data():
-    # Generate new random transactions
-    transactions = generate_sample_data()
-    
-    # Add new transactions to database without clearing existing ones
-    for transaction in transactions:
+    data_json = generate_sample_data()
+    df = pd.read_json(io.StringIO(data_json))
+    df.columns = [col.lower() for col in df.columns]
+    transaction_processor.transactions = df
+    transaction_processor.categorize_transactions()
+    Transaction.query.delete()
+    db.session.commit()
+    for _, row in df.iterrows():
         t = Transaction(
-            date=transaction['date'],
-            merchant=transaction['merchant'],
-            amount=float(transaction['amount']),
-            category=transaction['category']
+            date=str(row['date']),
+            merchant=row['merchant'],
+            amount=float(row['amount']),
+            category=row.get('category', None),
+            recurring=bool(row.get('recurring', False))
         )
         db.session.add(t)
-    
     db.session.commit()
-    
-    # Get all transactions including the new ones
-    all_transactions = Transaction.query.order_by(Transaction.date).all()
-    transactions_data = [{
-        "date": t.date,
-        "merchant": t.merchant,
-        "amount": t.amount,
-        "category": t.category
-    } for t in all_transactions]
-    
-    # Return all transactions including the new ones
-    return jsonify({"status": "success", "transactions": transactions_data})
+    return jsonify({"status": "sample data loaded"})
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
