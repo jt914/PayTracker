@@ -97,8 +97,8 @@ def generate_sample_data():
             minutes=random.randint(0, 59)
         )
         
-        # Only mark Subscriptions as recurring
-        is_recurring = category == 'Subscriptions'
+        # Determine if transaction is recurring based on category
+        is_recurring = category in ['Subscriptions', 'Utilities']
         
         transactions.append({
             "date": random_date.strftime("%Y-%m-%d"),
@@ -111,7 +111,7 @@ def generate_sample_data():
     # Sort transactions by date
     transactions.sort(key=lambda x: x["date"])
     
-    return transactions
+    return json.dumps(transactions)
 
 
 
@@ -195,28 +195,24 @@ def get_notifications():
 
 @app.route('/api/generate-sample-data', methods=['GET'])
 def api_generate_sample_data():
-    # Generate new random transactions
-    transactions = generate_sample_data()
-    
-    # Clear existing transactions
+    data_json = generate_sample_data()
+    df = pd.read_json(io.StringIO(data_json))
+    df.columns = [col.lower() for col in df.columns]
+    transaction_processor.transactions = df
+    transaction_processor.categorize_transactions()
     Transaction.query.delete()
     db.session.commit()
-    
-    # Add new transactions to database
-    for transaction in transactions:
+    for _, row in df.iterrows():
         t = Transaction(
-            date=str(transaction['date']),
-            merchant=transaction['merchant'],
-            amount=float(transaction['amount']),
-            category=transaction['category'],
-            recurring=transaction['recurring']
+            date=str(row['date']),
+            merchant=row['merchant'],
+            amount=float(row['amount']),
+            category=row.get('category', None),
+            recurring=bool(row.get('recurring', False))
         )
         db.session.add(t)
-    
     db.session.commit()
-    
-    # Return success status
-    return jsonify({"status": "success"})
+    return jsonify({"status": "sample data loaded"})
 
 @app.route('/api/transactions', methods=['GET'])
 def get_transactions():
